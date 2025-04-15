@@ -3,8 +3,9 @@ interface deskProps {
   id: string;
 }
 
-interface deskPostRequest extends deskProps {
+interface deskPostRequest {
   userId: string;
+  name: string;
 }
 
 export type { deskProps, deskPostRequest };

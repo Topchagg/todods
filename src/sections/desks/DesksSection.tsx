@@ -4,11 +4,10 @@ import { useEffect, useState } from 'react';
 import Desk from '@/entities/desk/desk';
 import useGetFireStoreData from '@/customHooks/useGetFirestore';
 
-import DeskForm from './form/deskForm';
+import DeskCreationForm from './form/DeskCreationForm';
 import { where } from 'firebase/firestore';
 import { deskProps } from '@/entities/desk/interface';
 import useCheckAuth from '@/customHooks/useCheckAuth';
-import Link from 'next/link';
 
 const DeskSection = () => {
   const [isCreate, setIsCreate] = useState<boolean>(false);
@@ -35,9 +34,7 @@ const DeskSection = () => {
         <div className="grid grid-cols-3 gap-10 mt-20">
           {result['data'].map((item, index) => (
             <div key={index}>
-              <Link href={`/desks/${item.id}`}>
-                <Desk {...item} />
-              </Link>
+              <Desk {...item} />
             </div>
           ))}
         </div>
@@ -56,7 +53,7 @@ const DeskSection = () => {
         <h1 className="text-[60px]">Creation of desk</h1>
       </div>
       <div className="mt-5">
-        <DeskForm />
+        <DeskCreationForm />
       </div>
       <div
         className="border border-blue-500 text-[40px] mt-10 cursor-pointer hover:scale-[0.9] hover:text-gray-500 transition-all duration-300"
