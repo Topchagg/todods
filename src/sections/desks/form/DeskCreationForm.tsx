@@ -29,7 +29,7 @@ const DeskForm = () => {
 
   const onSubmit = async (data: DeskFormData) => {
     if (!userId) {
-      console.error('User not authenticated');
+      console.error('User isnt authenticated');
       return;
     }
 

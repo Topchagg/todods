@@ -5,8 +5,15 @@ interface taskProps {
   description: string;
 }
 
-interface taskPostRequest extends taskProps {
-  deskId: string;
+interface taskFormData {
+  name: string;
+  description: string;
 }
 
-export type { taskProps, taskPostRequest };
+interface taskPostRequest {
+  deskId: string;
+  name: string;
+  description: string;
+}
+
+export type { taskProps, taskPostRequest, taskFormData };
