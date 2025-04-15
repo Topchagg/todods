@@ -9,15 +9,10 @@ interface taskProps extends taskData {
   isAbleToEdit: boolean;
 }
 
-interface taskFormData {
-  name: string;
-  description: string;
-}
+type taskFormData = Omit<taskData, 'id' | 'status'>;
 
-interface taskPostRequest {
+interface taskPostRequest extends taskFormData {
   deskId: string;
-  name: string;
-  description: string;
 }
 
 export type { taskProps, taskPostRequest, taskFormData, taskData };

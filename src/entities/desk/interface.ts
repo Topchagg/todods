@@ -8,11 +8,8 @@ interface deskProps {
   userId: string;
 }
 
-interface deskPostRequest {
-  userId: string;
-  name: string;
-  viewers: Pick<userInterface, 'email' | 'role'>[];
-  admins: Pick<userInterface, 'email' | 'role'>[];
-}
+type deskPostRequest = Omit<deskProps, 'id'>;
 
-export type { deskProps, deskPostRequest };
+type deskData = Omit<deskProps, 'userId'>;
+
+export type { deskProps, deskPostRequest, deskData };

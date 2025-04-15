@@ -2,11 +2,11 @@
 
 import { Dispatch, FC, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
-import { deskProps } from '@/entities/desk/interface';
+import { deskData } from '@/entities/desk/interface';
 import usePutFireStore from '@/customHooks/usePutFirestore';
 
 interface EditDeskFormProps {
-  desk: deskProps;
+  desk: deskData;
   setFunction: Dispatch<SetStateAction<boolean>>;
 }
 
