@@ -3,35 +3,60 @@ import { useParams } from 'next/navigation';
 import AddTaskForm from './form/AddTask';
 
 import Task from '@/entities/task/task';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { where } from 'firebase/firestore';
 import useGetFireStoreData from '@/customHooks/useGetFirestore';
 import { taskProps } from '@/entities/task/interface';
+import { deskProps } from '@/entities/desk/interface';
+import useCheckAuth from '@/customHooks/useCheckAuth';
+import useGetDocById from '@/customHooks/useGetDocById';
 
 const TaskSection = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
   const [isAddTask, setIsAddTask] = useState<boolean>(false);
+  const [isAbleToEdit, setIsAbleToEdit] = useState<boolean>(false);
+  const [isAbleToView, setIsAbleToView] = useState<boolean>(false);
 
-  const result = useGetFireStoreData<taskProps>(
+  const user = useCheckAuth();
+
+  const tasks = useGetFireStoreData<taskProps>(
     'tasks',
     id ? [where('deskId', '==', id)] : []
   );
 
-  if (isAddTask && id) {
+  const { data: desk } = useGetDocById<deskProps>('desks', id);
+
+  useEffect(() => {
+    if (user && desk) {
+      const isOwner = user.uid === desk.userId;
+      const isAdmin = desk.admins?.some((admin) => admin.email === user.email);
+      const isViewer = desk.viewers?.some(
+        (viewer) => viewer.email === user.email
+      );
+
+      if (isOwner || isAdmin) {
+        setIsAbleToEdit(true);
+      } else if (isViewer) {
+        setIsAbleToView(true);
+      }
+    }
+  }, [desk, user, desk]);
+
+  if (isAddTask && id && isAbleToEdit) {
     return <AddTaskForm deskId={id} setFunction={setIsAddTask} />;
   }
 
-  if (result['data']) {
+  if (tasks['data'].length > 0 && (isAbleToView || isAbleToEdit)) {
     return (
       <section>
         <div className="text-center text-[60px]">
           <h1>Tasks</h1>
         </div>
         <div className="mt-10">
-          {result['data'].map((item, index) => (
+          {tasks['data'].map((item, index) => (
             <div key={index}>
-              <Task {...item} />
+              <Task {...item} isAbleToEdit={isAbleToEdit} />
             </div>
           ))}
         </div>
@@ -46,10 +71,25 @@ const TaskSection = () => {
       </section>
     );
   }
+  if (tasks['data'].length === 0 && (isAbleToView || isAbleToEdit)) {
+    return (
+      <div className="text-[60px] pt-30">
+        <h2>Looks like u dont have any task</h2>
+        <div className="mt-10 flex justify-around pb-30">
+          <div
+            onClick={() => setIsAddTask(true)}
+            className="text-[40px] active:scale-[0.90] hover:bg-gray-500 transition-all duration-300 cursor-pointer rounded-3xl p-3"
+          >
+            Add task
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="text-[60px] pt-30">
-      <h2>Looks like u dont have any task</h2>
+      <h2>Looks like u dont have any access</h2>
     </div>
   );
 };

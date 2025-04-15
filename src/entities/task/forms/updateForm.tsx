@@ -2,11 +2,11 @@
 
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { taskProps } from '@/entities/task/interface';
+import { taskData } from '@/entities/task/interface';
 import usePutFireStore from '@/customHooks/usePutFirestore';
 
 interface UpdateTaskFormProps {
-  task: taskProps;
+  task: taskData;
   setFunction: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -16,12 +16,12 @@ const UpdateTaskForm: FC<UpdateTaskFormProps> = ({ task, setFunction }) => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<Pick<taskProps, 'name' | 'description' | 'status'>>();
+  } = useForm<Pick<taskData, 'name' | 'description' | 'status'>>();
 
   const { updateData, loading, error } = usePutFireStore();
 
   const onSubmit = async (
-    data: Pick<taskProps, 'name' | 'description' | 'status'>
+    data: Pick<taskData, 'name' | 'description' | 'status'>
   ) => {
     await updateData('tasks', task.id, data);
     if (!error) {

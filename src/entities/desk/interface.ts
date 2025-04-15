@@ -5,6 +5,7 @@ interface deskProps {
   id: string;
   viewers: Pick<userInterface, 'email' | 'role'>[];
   admins: Pick<userInterface, 'email' | 'role'>[];
+  userId: string;
 }
 
 interface deskPostRequest {

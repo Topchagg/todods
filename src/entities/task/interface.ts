@@ -1,8 +1,12 @@
-interface taskProps {
+interface taskData {
   id: string;
   status: 'done' | 'waiting';
   name: string;
   description: string;
+}
+
+interface taskProps extends taskData {
+  isAbleToEdit: boolean;
 }
 
 interface taskFormData {
@@ -16,4 +20,4 @@ interface taskPostRequest {
   description: string;
 }
 
-export type { taskProps, taskPostRequest, taskFormData };
+export type { taskProps, taskPostRequest, taskFormData, taskData };

@@ -5,7 +5,13 @@ import { taskProps } from './interface';
 import UpdateTaskForm from './forms/updateForm';
 import useDeleteFirestore from '@/customHooks/useDeleteFireStore';
 
-const Task: FC<taskProps> = ({ id, name, description, status }) => {
+const Task: FC<taskProps> = ({
+  id,
+  name,
+  description,
+  status,
+  isAbleToEdit,
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
@@ -26,7 +32,7 @@ const Task: FC<taskProps> = ({ id, name, description, status }) => {
     }
   }, [success]);
 
-  if (isUpdate) {
+  if (isUpdate && isAbleToEdit) {
     return (
       <UpdateTaskForm
         setFunction={setIsUpdate}
@@ -57,7 +63,7 @@ const Task: FC<taskProps> = ({ id, name, description, status }) => {
         </span>
       </div>
 
-      {isMenuOpen && (
+      {isMenuOpen && isAbleToEdit && (
         <ul className="absolute z-50 bg-black border border-gray-300 rounded shadow-md w-32">
           <li
             className="px-4 py-2 hover:bg-gray-800 cursor-pointer"
