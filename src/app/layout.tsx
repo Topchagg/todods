@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import useCheckAuth from '@/customHooks/useCheckAuth';
+import AuthProvider from '@/components/authProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -20,17 +20,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  useCheckAuth();
-
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
