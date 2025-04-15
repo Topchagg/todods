@@ -1,15 +1,16 @@
 'use client';
 
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { deskProps } from '@/entities/desk/interface';
 import usePutFireStore from '@/customHooks/usePutFirestore';
 
 interface EditDeskFormProps {
   desk: deskProps;
+  setFunction: Dispatch<SetStateAction<boolean>>;
 }
 
-const EditDeskForm: FC<EditDeskFormProps> = ({ desk }) => {
+const EditDeskForm: FC<EditDeskFormProps> = ({ desk, setFunction }) => {
   const {
     register,
     handleSubmit,
@@ -54,6 +55,14 @@ const EditDeskForm: FC<EditDeskFormProps> = ({ desk }) => {
         className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
       >
         {loading ? 'Saving...' : 'Save Changes'}
+      </button>
+      <button
+        type="button"
+        disabled={loading}
+        onClick={() => setFunction((prev) => !prev)}
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition mt-5"
+      >
+        Cancel
       </button>
     </form>
   );

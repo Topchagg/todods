@@ -5,10 +5,14 @@ import Link from 'next/link';
 import { deskProps } from './interface';
 import useDeleteFirestore from '@/customHooks/useDeleteFireStore';
 import EditDeskForm from './forms/updateForm';
+import AddUserForm from './forms/AddUserForm';
+import RemoveUserForm from './forms/RemoveUserForm';
 
-const Desk: FC<deskProps> = ({ name, id }) => {
-  const [isShowMenu, setIsShowMenu] = useState(false);
-  const [isUpdate, setIsUpdate] = useState(false);
+const Desk: FC<deskProps> = ({ name, id, admins, viewers }) => {
+  const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [isAddUser, setIsAddUser] = useState<boolean>(false);
+  const [isRemoveUser, setIsRemoveUser] = useState<boolean>(false);
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -34,12 +38,37 @@ const Desk: FC<deskProps> = ({ name, id }) => {
         </div>
       </Link>
 
-      {isUpdate && <EditDeskForm desk={{ name, id }} />}
+      {isUpdate && (
+        <EditDeskForm
+          desk={{ name, id, admins, viewers }}
+          setFunction={setIsUpdate}
+        />
+      )}
+
+      {isRemoveUser && (
+        <RemoveUserForm
+          deskId={id}
+          admins={admins}
+          viewers={viewers}
+          setFunction={setIsRemoveUser}
+        />
+      )}
+
+      {isAddUser && (
+        <AddUserForm
+          deskId={id}
+          setFunction={setIsAddUser}
+          users={{
+            admins: admins,
+            viewers: viewers,
+          }}
+        />
+      )}
 
       {isShowMenu && (
-        <div className="absolute top-2 left-2 z-10 bg-white text-sm rounded shadow-lg w-[140px]">
+        <div className="absolute top-2 left-2 z-10 bg-black text-white text-sm rounded shadow-lg w-[140px]">
           <button
-            className="w-full text-left px-4 py-2 hover:bg-gray-100 transition"
+            className="w-full text-left px-4 py-2 hover:bg-gray-900 transition"
             onClick={() => {
               setIsShowMenu(false);
               setIsUpdate(true);
@@ -47,8 +76,28 @@ const Desk: FC<deskProps> = ({ name, id }) => {
           >
             Update
           </button>
+
           <button
-            className="w-full text-left px-4 py-2 hover:bg-gray-100 transition text-red-600"
+            className="w-full text-left px-4 py-2 hover:bg-gray-900 transition"
+            onClick={() => {
+              setIsShowMenu(false);
+              setIsAddUser(true);
+            }}
+          >
+            Add user
+          </button>
+
+          <button
+            className="w-full text-left px-4 py-2 hover:bg-gray-900 transition"
+            onClick={() => {
+              setIsRemoveUser(true);
+            }}
+          >
+            Remove user
+          </button>
+
+          <button
+            className="w-full text-left px-4 py-2 hover:bg-gray-900 transition text-red-600"
             onClick={() => {
               deleteDocument('desks', id);
             }}

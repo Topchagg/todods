@@ -11,8 +11,6 @@ import { taskProps } from '@/entities/task/interface';
 const TaskSection = () => {
   const { id } = useParams();
 
-  const [isAddUser, setIsAddUser] = useState<boolean>(false);
-  const [isRemoveUser, setIsRemoveUser] = useState<boolean>(false);
   const [isAddTask, setIsAddTask] = useState<boolean>(false);
 
   const result = useGetFireStoreData<taskProps>(
@@ -38,18 +36,6 @@ const TaskSection = () => {
           ))}
         </div>
         <div className="mt-10 flex justify-around pb-30">
-          <div
-            onClick={() => setIsAddUser(true)}
-            className="text-[40px] active:scale-[0.90] hover:bg-gray-500 transition-all duration-300 cursor-pointer rounded-3xl p-3"
-          >
-            Add user
-          </div>
-          <div
-            onClick={() => setIsRemoveUser(true)}
-            className="text-[40px] active:scale-[0.90] hover:bg-gray-500 transition-all duration-300 cursor-pointer rounded-3xl p-3"
-          >
-            Remove user
-          </div>
           <div
             onClick={() => setIsAddTask(true)}
             className="text-[40px] active:scale-[0.90] hover:bg-gray-500 transition-all duration-300 cursor-pointer rounded-3xl p-3"

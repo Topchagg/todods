@@ -36,6 +36,8 @@ const DeskForm = () => {
     const deskData: deskPostRequest = {
       name: data.name,
       userId: userId,
+      viewers: [],
+      admins: [],
     };
 
     await postData('desks', deskData);
