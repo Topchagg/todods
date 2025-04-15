@@ -4,7 +4,7 @@ import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { taskFormData, taskPostRequest } from '@/entities/task/interface';
 import usePostFirestore from '@/customHooks/usePostFirestore';
-import useCheckAuth from '@/customHooks/useCheckAuth';
+import { useAuthStore } from '@/store/userStore';
 
 interface AddTaskFormProps {
   deskId: string;
@@ -21,7 +21,7 @@ const AddTaskForm: FC<AddTaskFormProps> = ({ deskId, setFunction }) => {
 
   const { postData, loading, error, success } =
     usePostFirestore<taskPostRequest>();
-  const user = useCheckAuth();
+  const user = useAuthStore((state) => state.user);
 
   const onSubmit = async (data: taskFormData) => {
     if (!user) {

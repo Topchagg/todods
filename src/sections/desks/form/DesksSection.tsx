@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react';
 import Desk from '@/entities/desk/desk';
 import useGetFireStoreData from '@/customHooks/useGetFirestore';
 
-import DeskCreationForm from './form/DeskCreationForm';
+import DeskForm from './DeskCreationForm';
 import { where } from 'firebase/firestore';
 import { deskProps } from '@/entities/desk/interface';
-import useCheckAuth from '@/customHooks/useCheckAuth';
+import { useAuthStore } from '@/store/userStore';
 
 const DeskSection = () => {
   const [isCreate, setIsCreate] = useState<boolean>(false);
-  const user = useCheckAuth();
+  const user = useAuthStore((state) => state.user);
   const [uid, setUid] = useState<string | null>(null);
 
   const result = useGetFireStoreData<deskProps>(
@@ -53,7 +53,7 @@ const DeskSection = () => {
         <h1 className="text-[60px]">Creation of desk</h1>
       </div>
       <div className="mt-5">
-        <DeskCreationForm />
+        <DeskForm />
       </div>
       <div
         className="border border-blue-500 text-[40px] mt-10 cursor-pointer hover:scale-[0.9] hover:text-gray-500 transition-all duration-300"

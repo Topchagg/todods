@@ -3,14 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import usePostFirestore from '@/customHooks/usePostFirestore';
-import useCheckAuth from '@/customHooks/useCheckAuth';
 import { deskPostRequest } from '@/entities/desk/interface';
+import { useAuthStore } from '@/store/userStore';
 
 interface DeskFormData {
   name: string;
 }
 
-const DeskForm = () => {
+const DeskCreationForm = () => {
   const {
     register,
     handleSubmit,
@@ -18,7 +18,7 @@ const DeskForm = () => {
   } = useForm<DeskFormData>();
   const { postData, loading, error, success } =
     usePostFirestore<deskPostRequest>();
-  const user = useCheckAuth();
+  const user = useAuthStore((state) => state.user);
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -86,4 +86,4 @@ const DeskForm = () => {
   );
 };
 
-export default DeskForm;
+export default DeskCreationForm;

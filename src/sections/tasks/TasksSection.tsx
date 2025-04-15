@@ -8,8 +8,8 @@ import { where } from 'firebase/firestore';
 import useGetFireStoreData from '@/customHooks/useGetFirestore';
 import { taskProps } from '@/entities/task/interface';
 import { deskProps } from '@/entities/desk/interface';
-import useCheckAuth from '@/customHooks/useCheckAuth';
 import useGetDocById from '@/customHooks/useGetDocById';
+import { useAuthStore } from '@/store/userStore';
 
 const TaskSection = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,7 +18,7 @@ const TaskSection = () => {
   const [isAbleToEdit, setIsAbleToEdit] = useState<boolean>(false);
   const [isAbleToView, setIsAbleToView] = useState<boolean>(false);
 
-  const user = useCheckAuth();
+  const user = useAuthStore((state) => state.user);
 
   const tasks = useGetFireStoreData<taskProps>(
     'tasks',

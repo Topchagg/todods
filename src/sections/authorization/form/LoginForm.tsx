@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -29,6 +29,7 @@ const LoginForm: React.FC = () => {
     try {
       await signInWithEmailAndPassword(authApp, email, password);
       console.log('User logged in successfully!');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -40,7 +41,9 @@ const LoginForm: React.FC = () => {
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <div className='mt-5'><label htmlFor="email">Email</label></div>
+          <div className="mt-5">
+            <label htmlFor="email">Email</label>
+          </div>
           <input
             {...register('email', { required: 'Email is required' })}
             type="email"
@@ -48,22 +51,31 @@ const LoginForm: React.FC = () => {
             placeholder="Enter your email"
             className="border p-2 w-full mt-2"
           />
-          {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-red-500">{errors.email.message}</p>
+          )}
         </div>
 
         <div className="mt-5">
-          <div className='mt-5'><label htmlFor="password">Password</label></div>
+          <div className="mt-5">
+            <label htmlFor="password">Password</label>
+          </div>
           <input
             {...register('password', {
               required: 'Password is required',
-              minLength: { value: 6, message: 'Password must be at least 6 characters long' },
+              minLength: {
+                value: 6,
+                message: 'Password must be at least 6 characters long',
+              },
             })}
             type="password"
             id="password"
             placeholder="Enter your password"
             className="border p-2 w-full mt-2"
           />
-          {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+          {errors.password && (
+            <p className="text-red-500">{errors.password.message}</p>
+          )}
         </div>
 
         {error && <p className="text-red-500 mt-4">{error}</p>}

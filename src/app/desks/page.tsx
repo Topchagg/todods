@@ -1,11 +1,11 @@
-import DeskSection from "@/sections/desks/DesksSection"
+import DeskSection from '@/sections/desks/form/DesksSection';
 
 const Desks = () => {
-    return (
-        <>
-            <DeskSection/>
-        </>
-    )
-}
+  return (
+    <>
+      <DeskSection />
+    </>
+  );
+};
 
-export default Desks
+export default Desks;
