@@ -4,6 +4,7 @@ import { useState, FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { authApp } from '@/firebase/firebase';
+import LoadingItem from '@/shared/loadingItem';
 
 interface RegisterFormData {
   email: string;
@@ -45,6 +46,10 @@ const RegistrationForm: FC = () => {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return <LoadingItem />;
+  }
 
   return (
     <div>

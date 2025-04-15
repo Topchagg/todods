@@ -8,6 +8,7 @@ import DeskForm from './DeskCreationForm';
 import { where } from 'firebase/firestore';
 import { deskProps } from '@/entities/desk/interface';
 import { useAuthStore } from '@/store/userStore';
+import LoadingItem from '@/shared/LoadingItem';
 
 const DeskSection = () => {
   const [isCreate, setIsCreate] = useState<boolean>(false);
@@ -25,6 +26,9 @@ const DeskSection = () => {
     }
   }, [user?.uid]);
 
+  if (result.loading) {
+    return <LoadingItem />;
+  }
   if (!isCreate && result['data']) {
     return (
       <div className="text-center pt-10 w-[80%] m-0 m-auto">
@@ -47,22 +51,24 @@ const DeskSection = () => {
       </div>
     );
   }
-  return (
-    <div className="text-center pt-10 w-[80%] m-0 m-auto">
-      <div>
-        <h1 className="text-[60px]">Creation of desk</h1>
+  if (isCreate) {
+    return (
+      <div className="text-center pt-10 w-[80%] m-0 m-auto">
+        <div>
+          <h1 className="text-[60px]">Creation of desk</h1>
+        </div>
+        <div className="mt-5">
+          <DeskForm />
+        </div>
+        <div
+          className="border border-blue-500 text-[40px] mt-10 cursor-pointer hover:scale-[0.9] hover:text-gray-500 transition-all duration-300"
+          onClick={() => setIsCreate(false)}
+        >
+          Cancel creation of desk
+        </div>
       </div>
-      <div className="mt-5">
-        <DeskForm />
-      </div>
-      <div
-        className="border border-blue-500 text-[40px] mt-10 cursor-pointer hover:scale-[0.9] hover:text-gray-500 transition-all duration-300"
-        onClick={() => setIsCreate(false)}
-      >
-        Cancel creation of desk
-      </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default DeskSection;

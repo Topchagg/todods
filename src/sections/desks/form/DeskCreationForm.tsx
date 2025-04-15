@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import usePostFirestore from '@/customHooks/usePostFirestore';
 import { deskPostRequest } from '@/entities/desk/interface';
 import { useAuthStore } from '@/store/userStore';
+import LoadingItem from '@/shared/LoadingItem';
 
 interface DeskFormData {
   name: string;
@@ -48,6 +49,10 @@ const DeskCreationForm = () => {
       window.location.reload();
     }
   }, [success]);
+
+  if (loading) {
+    return <LoadingItem />;
+  }
 
   return (
     <div>

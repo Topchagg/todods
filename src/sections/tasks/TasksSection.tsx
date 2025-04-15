@@ -10,6 +10,7 @@ import { taskProps } from '@/entities/task/interface';
 import { deskProps } from '@/entities/desk/interface';
 import useGetDocById from '@/customHooks/useGetDocById';
 import { useAuthStore } from '@/store/userStore';
+import LoadingItem from '@/shared/loadingItem';
 
 const TaskSection = () => {
   const { id } = useParams<{ id: string }>();
@@ -42,6 +43,10 @@ const TaskSection = () => {
       }
     }
   }, [desk, user, desk]);
+
+  if (!user && !desk) {
+    return <LoadingItem />;
+  }
 
   if (isAddTask && id && isAbleToEdit) {
     return <AddTaskForm deskId={id} setFunction={setIsAddTask} />;

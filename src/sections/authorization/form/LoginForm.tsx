@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { authApp } from '@/firebase/firebase';
+import LoadingItem from '@/shared/loadingItem';
 
 interface LoginFormData {
   email: string;
@@ -36,6 +37,10 @@ const LoginForm: React.FC = () => {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return <LoadingItem />;
+  }
 
   return (
     <div>
