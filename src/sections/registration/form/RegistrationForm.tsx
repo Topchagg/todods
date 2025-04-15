@@ -4,7 +4,8 @@ import { useState, FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { authApp } from '@/firebase/firebase';
-import LoadingItem from '@/shared/loadingItem';
+import LoadingItem from '@/shared/LoadingItem';
+import isEmail from 'validator/lib/isEmail';
 
 interface RegisterFormData {
   email: string;
@@ -75,7 +76,10 @@ const RegistrationForm: FC = () => {
             <label htmlFor="username">Username</label>
           </div>
           <input
-            {...register('username', { required: 'Username is required' })}
+            {...register('username', {
+              required: 'Username is required',
+              validate: (value) => isEmail(value) || 'Invalid email address',
+            })}
             type="text"
             id="username"
             placeholder="Enter your username"

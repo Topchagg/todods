@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { authApp } from '@/firebase/firebase';
-import LoadingItem from '@/shared/loadingItem';
+import LoadingItem from '@/shared/LoadingItem';
+import isEmail from 'validator/lib/isEmail';
 
 interface LoginFormData {
   email: string;
@@ -50,7 +51,10 @@ const LoginForm: React.FC = () => {
             <label htmlFor="email">Email</label>
           </div>
           <input
-            {...register('email', { required: 'Email is required' })}
+            {...register('email', {
+              required: 'Email is required',
+              validate: (value) => isEmail(value) || 'Invalid email address',
+            })}
             type="email"
             id="email"
             placeholder="Enter your email"
