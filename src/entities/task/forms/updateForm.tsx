@@ -1,6 +1,6 @@
 'use client';
 
-import { Dispatch, FC, SetStateAction } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { taskProps } from '@/entities/task/interface';
 import usePutFireStore from '@/customHooks/usePutFirestore';
@@ -15,6 +15,7 @@ const UpdateTaskForm: FC<UpdateTaskFormProps> = ({ task, setFunction }) => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<Pick<taskProps, 'name' | 'description' | 'status'>>();
 
   const { updateData, loading, error } = usePutFireStore();
@@ -27,6 +28,14 @@ const UpdateTaskForm: FC<UpdateTaskFormProps> = ({ task, setFunction }) => {
       window.location.reload();
     }
   };
+
+  useEffect(() => {
+    if (task) {
+      setValue('name', task.name);
+      setValue('description', task.description);
+      setValue('status', task.status);
+    }
+  }, [task, setValue]);
 
   return (
     <form
