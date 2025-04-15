@@ -1,5 +1,5 @@
-'use client'
-import { useState, useEffect } from "react";
+'use client';
+import { useState, useEffect } from 'react';
 import {
   collection,
   getDocs,
@@ -7,12 +7,12 @@ import {
   DocumentData,
   query,
   QueryConstraint,
-} from "firebase/firestore";
-import { db } from "@/firebase/firebase";
+} from 'firebase/firestore';
+import { db } from '@/firebase/firebase';
 
 const useGetFireStoreData = <T>(
   collectionName: string,
-  queryConstraints: QueryConstraint[] = [],
+  queryConstraints: QueryConstraint[] = []
 ) => {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -26,7 +26,9 @@ const useGetFireStoreData = <T>(
         const collectionRef = collection(db, collectionName);
         const finalQuery = query(collectionRef, ...queryConstraints);
 
-        const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(finalQuery);
+        const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(
+          finalQuery
+        );
         const documents = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -40,10 +42,9 @@ const useGetFireStoreData = <T>(
     };
 
     fetchData();
-  }, [collectionName, JSON.stringify(queryConstraints)]); 
+  }, [collectionName, JSON.stringify(queryConstraints)]);
 
   return { data, loading, error };
 };
 
 export default useGetFireStoreData;
-

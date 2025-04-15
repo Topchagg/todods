@@ -1,6 +1,6 @@
 import { userInterface } from '@/interfaces/user';
 
-interface deskProps {
+interface deskData {
   name: string;
   id: string;
   viewers: Pick<userInterface, 'email' | 'role'>[];
@@ -8,8 +8,12 @@ interface deskProps {
   userId: string;
 }
 
-type deskPostRequest = Omit<deskProps, 'id'>;
+interface deskPostRequest extends Omit<deskData, 'id'> {
+  userId: string;
+}
 
-type deskData = Omit<deskProps, 'userId'>;
+interface deskProps extends deskData {
+  isOwner: boolean;
+}
 
 export type { deskProps, deskPostRequest, deskData };

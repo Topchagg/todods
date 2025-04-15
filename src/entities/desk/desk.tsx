@@ -9,7 +9,14 @@ import AddUserForm from './forms/AddUserForm';
 import RemoveUserForm from './forms/RemoveUserForm';
 import routes from '@/constants/routes';
 
-const Desk: FC<deskProps> = ({ name, id, admins, viewers }) => {
+const Desk: FC<deskProps> = ({
+  name,
+  id,
+  admins,
+  viewers,
+  isOwner,
+  userId,
+}) => {
   const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [isAddUser, setIsAddUser] = useState<boolean>(false);
@@ -41,7 +48,7 @@ const Desk: FC<deskProps> = ({ name, id, admins, viewers }) => {
 
       {isUpdate && (
         <EditDeskForm
-          desk={{ name, id, admins, viewers }}
+          desk={{ name, id, admins, viewers, userId }}
           setFunction={setIsUpdate}
         />
       )}
@@ -66,7 +73,7 @@ const Desk: FC<deskProps> = ({ name, id, admins, viewers }) => {
         />
       )}
 
-      {isShowMenu && (
+      {isShowMenu && isOwner && (
         <div className="absolute top-2 left-2 z-10 bg-black text-white text-sm rounded shadow-lg w-[140px]">
           <button
             className="w-full text-left px-4 py-2 hover:bg-gray-900 transition"

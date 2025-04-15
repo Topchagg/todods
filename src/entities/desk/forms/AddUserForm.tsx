@@ -1,8 +1,12 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+
 import usePutFireStore from '@/customHooks/usePutFirestore';
-import { Dispatch, SetStateAction } from 'react';
+import useGetFireStoreData from '@/customHooks/useGetFirestore';
+import { db } from '@/firebase/firebase';
 import { userInterface } from '@/interfaces/user';
 
 interface AddUserFormProps {
@@ -21,27 +25,65 @@ interface AddUserData {
 
 const AddUserForm: React.FC<AddUserFormProps> = ({
   deskId,
-  setFunction,
   users,
+  setFunction,
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<AddUserData>();
-  const { updateData, loading, error } = usePutFireStore();
+
+  const {
+    updateData,
+    loading: updateLoading,
+    error: updateError,
+  } = usePutFireStore();
+  const [customError, setCustomError] = useState('');
+  const [emailToFind, setEmailToFind] = useState('');
+  const { data: allUsers, loading: usersLoading } =
+    useGetFireStoreData<userInterface>('users');
+
+  useEffect(() => {
+    if (emailToFind) {
+      const exists = allUsers.find((u) => u.email === emailToFind);
+      if (!exists) {
+        setCustomError('User not found in Firestore');
+      } else {
+        setCustomError('');
+      }
+    }
+  }, [emailToFind, allUsers]);
 
   const onSubmit = async (data: AddUserData) => {
     const { email, role } = data;
+    setEmailToFind(email);
+
+    const userDoc = allUsers.find((u) => u.email === email);
+
+    if (!userDoc) {
+      setCustomError('User not found in Firestore');
+      return;
+    }
 
     const newUser = { email, role };
 
-    await updateData('desks', deskId, {
-      [role]: [...users[role], newUser],
-    });
+    try {
+      const userRef = doc(db, 'users', userDoc.id);
+      await updateDoc(userRef, {
+        desks: arrayUnion(deskId),
+      });
 
-    if (!error) {
-      window.location.reload();
+      await updateData('desks', deskId, {
+        [role]: [...users[role], newUser],
+      });
+
+      if (!updateError) {
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error(err);
+      setCustomError('Ошибка при обновлении данных');
     }
   };
 
@@ -53,14 +95,14 @@ const AddUserForm: React.FC<AddUserFormProps> = ({
         <div className="mb-4">
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-300"
           >
             Email of user
           </label>
           <input
             id="email"
             type="email"
-            {...register('email', { required: 'Email обязателен' })}
+            {...register('email', { required: 'Email is required' })}
             className="border p-2 w-full mt-1 rounded"
             placeholder="Enter email"
           />
@@ -72,13 +114,13 @@ const AddUserForm: React.FC<AddUserFormProps> = ({
         <div className="mb-4">
           <label
             htmlFor="role"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-300"
           >
             Role of user
           </label>
           <select
             id="role"
-            {...register('role', { required: 'Choice role of user' })}
+            {...register('role', { required: 'Role is required' })}
             className="border p-2 w-full mt-1 rounded bg-black"
           >
             <option value="viewers">Viewer</option>
@@ -89,24 +131,25 @@ const AddUserForm: React.FC<AddUserFormProps> = ({
           )}
         </div>
 
+        {customError && <p className="text-red-500 mt-2">{customError}</p>}
+
         <button
           type="submit"
           className="bg-blue-500 text-white p-2 rounded w-full hover:bg-blue-600 transition"
-          disabled={loading}
+          disabled={updateLoading || usersLoading}
         >
-          {loading ? 'Adding...' : 'Add user'}
+          {updateLoading ? 'Adding...' : 'Add user'}
         </button>
+
         <button
           type="button"
           className="bg-blue-500 text-white p-2 rounded w-full hover:bg-blue-600 transition mt-5"
-          disabled={loading}
-          onClick={() => setFunction((prev) => !prev)}
+          onClick={() => setFunction(false)}
+          disabled={updateLoading}
         >
           Cancel
         </button>
       </form>
-
-      {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>
   );
 };

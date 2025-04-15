@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { where } from 'firebase/firestore';
 import useGetFireStoreData from '@/customHooks/useGetFirestore';
 import { taskProps } from '@/entities/task/interface';
-import { deskProps } from '@/entities/desk/interface';
+import { deskData } from '@/entities/desk/interface';
 import useGetDocById from '@/customHooks/useGetDocById';
 import { useAuthStore } from '@/store/userStore';
 import LoadingItem from '@/shared/LoadingItem';
@@ -26,7 +26,7 @@ const TaskSection = () => {
     id ? [where('deskId', '==', id)] : []
   );
 
-  const { data: desk } = useGetDocById<deskProps>('desks', id);
+  const { data: desk } = useGetDocById<deskData>('desks', id);
 
   useEffect(() => {
     if (user && desk) {
@@ -38,6 +38,7 @@ const TaskSection = () => {
 
       if (isOwner || isAdmin) {
         setIsAbleToEdit(true);
+        console.log('s');
       } else if (isViewer) {
         setIsAbleToView(true);
       }
@@ -65,14 +66,16 @@ const TaskSection = () => {
             </div>
           ))}
         </div>
-        <div className="mt-10 flex justify-around pb-30">
-          <div
-            onClick={() => setIsAddTask(true)}
-            className="text-[40px] active:scale-[0.90] hover:bg-gray-500 transition-all duration-300 cursor-pointer rounded-3xl p-3"
-          >
-            Add task
+        {isAbleToEdit && (
+          <div className="mt-10 flex justify-around pb-30">
+            <div
+              onClick={() => setIsAddTask(true)}
+              className="text-[40px] active:scale-[0.90] hover:bg-gray-500 transition-all duration-300 cursor-pointer rounded-3xl p-3"
+            >
+              Add task
+            </div>
           </div>
-        </div>
+        )}
       </section>
     );
   }
@@ -80,14 +83,16 @@ const TaskSection = () => {
     return (
       <div className="text-[60px] pt-30 text-center w-1/2 m-0 m-auto">
         <h2>Looks like u dont have any task</h2>
-        <div className="mt-10 flex justify-around pb-30">
-          <div
-            onClick={() => setIsAddTask(true)}
-            className="text-[40px] active:scale-[0.90] hover:bg-gray-500 transition-all duration-300 cursor-pointer rounded-3xl p-3"
-          >
-            Add task
+        {isAbleToEdit && (
+          <div className="mt-10 flex justify-around pb-30">
+            <div
+              onClick={() => setIsAddTask(true)}
+              className="text-[40px] active:scale-[0.90] hover:bg-gray-500 transition-all duration-300 cursor-pointer rounded-3xl p-3"
+            >
+              Add task
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }

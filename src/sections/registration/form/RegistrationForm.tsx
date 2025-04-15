@@ -4,6 +4,8 @@ import { useState, FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { authApp } from '@/firebase/firebase';
+import { db } from '@/firebase/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 import LoadingItem from '@/shared/LoadingItem';
 import isEmail from 'validator/lib/isEmail';
 
@@ -40,6 +42,14 @@ const RegistrationForm: FC = () => {
       await updateProfile(user, {
         displayName: username,
       });
+
+      await setDoc(doc(db, 'users', user.uid), {
+        email: user.email,
+        username: username,
+        desks: [],
+      });
+
+      console.log('✅ User registered and saved to Firestore');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
