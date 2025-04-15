@@ -1,8 +1,9 @@
 'use client';
 
-import Link from 'next/link';
+import routes from '@/constants/routes';
 import RegistrationForm from './form/RegistrationForm';
 import { useAuthStore } from '@/store/userStore';
+import Link from 'next/link';
 
 const RegistrationSection = () => {
   const user = useAuthStore((state) => state.user);
@@ -23,7 +24,7 @@ const RegistrationSection = () => {
       <div className="pt-5 w-1/2 m-0 m-auto">
         <RegistrationForm />
       </div>
-      <Link href={'/authorization'}>
+      <Link href={routes.authorization}>
         <div className="text-center underline cursor-pointer mt-5 hover:text-gray-500 transition-all duration-300">
           Already have an account? Sign in!
         </div>

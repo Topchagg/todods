@@ -7,6 +7,7 @@ import useDeleteFirestore from '@/customHooks/useDeleteFireStore';
 import EditDeskForm from './forms/updateForm';
 import AddUserForm from './forms/AddUserForm';
 import RemoveUserForm from './forms/RemoveUserForm';
+import routes from '@/constants/routes';
 
 const Desk: FC<deskProps> = ({ name, id, admins, viewers }) => {
   const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
@@ -29,7 +30,7 @@ const Desk: FC<deskProps> = ({ name, id, admins, viewers }) => {
 
   return (
     <div className="relative group">
-      <Link href={`/desks/${id}`} className="block">
+      <Link href={routes['desks/id'](id)} className="block">
         <div
           onContextMenu={handleContextMenu}
           className="w-[300px] h-[300px] bg-gray-800 border border-gray-600 rounded-2xl text-white text-2xl font-semibold flex justify-center items-center hover:bg-gray-700 transition-all duration-300 cursor-pointer shadow-md"

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useAuthStore } from '@/store/userStore';
 import LoginForm from './form/LoginForm';
+import routes from '@/constants/routes';
 
 const AuthorizationSection = () => {
   const isAuth = useAuthStore((state) => state.user?.uid);
@@ -14,7 +15,7 @@ const AuthorizationSection = () => {
         <div className="pt-5 w-1/2 m-0 m-auto">
           <LoginForm />
         </div>
-        <Link href={'/registration'}>
+        <Link href={routes.registration}>
           <div className="mt-10 underline text-center cursor-pointer  hover:text-gray-500 transition-all duration-300">
             {`Don't you have an account? Register!`}
           </div>
@@ -25,7 +26,7 @@ const AuthorizationSection = () => {
   return (
     <div className="text-center">
       <h1 className="mt-15 text-[60px]">You have entered into your acc!</h1>
-      <Link href={'/desks'}>
+      <Link href={routes.desks}>
         <h2 className="mt-5 text-[40px] underline hover:text-gray-500 transition-all duration-300 cursor-pointer">
           Go to TODOlists
         </h2>
