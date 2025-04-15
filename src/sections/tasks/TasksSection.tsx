@@ -10,7 +10,7 @@ import { taskProps } from '@/entities/task/interface';
 import { deskProps } from '@/entities/desk/interface';
 import useGetDocById from '@/customHooks/useGetDocById';
 import { useAuthStore } from '@/store/userStore';
-import LoadingItem from '@/shared/loadingItem';
+import LoadingItem from '@/shared/LoadingItem';
 
 const TaskSection = () => {
   const { id } = useParams<{ id: string }>();
@@ -78,7 +78,7 @@ const TaskSection = () => {
   }
   if (tasks['data'].length === 0 && (isAbleToView || isAbleToEdit)) {
     return (
-      <div className="text-[60px] pt-30">
+      <div className="text-[60px] pt-30 text-center w-1/2 m-0 m-auto">
         <h2>Looks like u dont have any task</h2>
         <div className="mt-10 flex justify-around pb-30">
           <div
@@ -93,8 +93,8 @@ const TaskSection = () => {
   }
 
   return (
-    <div className="text-[60px] pt-30">
-      <h2>Looks like u dont have any access</h2>
+    <div className="text-[60px] pt-30 text-center w-1/2 m-0 m-auto">
+      Looks like u dont have any accesss
     </div>
   );
 };

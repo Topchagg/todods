@@ -60,7 +60,10 @@ const RegistrationForm: FC = () => {
             <label htmlFor="email">Email</label>
           </div>
           <input
-            {...register('email', { required: 'Email is required' })}
+            {...register('email', {
+              required: 'Email is required',
+              validate: (value) => isEmail(value) || 'Invalid email address',
+            })}
             type="email"
             id="email"
             placeholder="Enter your email"
@@ -78,7 +81,6 @@ const RegistrationForm: FC = () => {
           <input
             {...register('username', {
               required: 'Username is required',
-              validate: (value) => isEmail(value) || 'Invalid email address',
             })}
             type="text"
             id="username"
